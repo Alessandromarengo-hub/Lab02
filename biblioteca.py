@@ -1,20 +1,84 @@
 def carica_da_file(file_path):
     """Carica i libri dal file"""
+    try:
+        file = open(file_path)
+    except FileNotFoundError:
+        print("None")
+
+    n_sezioni = int(file.readline())
+    biblioteca = []
+    for i in range(n_sezioni):
+        sezione = []
+        biblioteca.append(sezione)
+
+    for line in file:
+        linea = line.strip().split(",")
+        libro = []
+        for dato in linea:
+            libro.append(dato)
+
+        indice = int(libro[4])-1
+        biblioteca[indice].append(libro)
+
+    return(biblioteca)
+    file.close()
     # TODO
 
 
 def aggiungi_libro(biblioteca, titolo, autore, anno, pagine, sezione, file_path):
     """Aggiunge un libro nella biblioteca"""
+    elenco_titoli = []
+    n_sezioni = 0
+    for sezione in biblioteca:
+        n_sezioni = n_sezioni +1
+        for libro in sezione:
+            elenco_titoli.append(libro[0])
+    if titolo in elenco_titoli or sezione > n_sezioni:
+        return False
+    else:
+        try:
+            file2 = open(file_path)
+        except FileNotFoundError:
+            return False
+        stringa = titolo + "," + autore + "," + anno + "," + pagine + "," + sezione + "\n"
+        file2.write(stringa)
+        file2.close()
+        biblioteca = carica_da_file(file_path)
+        return True
+
     # TODO
 
 
 def cerca_libro(biblioteca, titolo):
     """Cerca un libro nella biblioteca dato il titolo"""
+    elenco_titoli = []
+    for sezione in biblioteca:
+        for libro in sezione:
+            elenco_titoli.append(libro[0])
+    if titolo in elenco_titoli:
+        for sezione in biblioteca:
+            for libro in sezione:
+                if libro[0] == titolo:
+                    print(" ".join(libro))
+                    return True
+
+    else:
+        return False
     # TODO
 
 
 def elenco_libri_sezione_per_titolo(biblioteca, sezione):
     """Ordina i titoli di una data sezione della biblioteca in ordine alfabetico"""
+    elenco_titoli = []
+    if sezione > (len(biblioteca)+1):
+        return False
+    else:
+        section = biblioteca[sezione]
+        for libro in section:
+            elenco_titoli.append(libro[0])
+
+        finale = sorted(elenco_titoli)
+        return(sezione, finale)
     # TODO
 
 
